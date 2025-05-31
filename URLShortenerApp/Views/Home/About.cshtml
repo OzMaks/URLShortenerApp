@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@model string
+
+<h2>About URL Shortener Algorithm</h2>
+
+@if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+{
+        <form asp-action="UpdateAbout" method="post">
+            <textarea name="content" class="form-control" rows="10">@Model</textarea>
+            <button type="submit" class="btn btn-primary mt-2">Save</button>
+        </form>
+}
+else
+{
+        <div class="border rounded p-3 bg-light">
+            <pre>@Model</pre>
+        </div>
+}

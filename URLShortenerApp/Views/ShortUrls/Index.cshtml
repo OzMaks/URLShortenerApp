@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ShortUrl>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+
+<h2>Short URLs</h2>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="mt-4">
+        <h4>Add New URL</h4>
+        <input type="url" id="newUrl" class="form-control" placeholder="Enter URL" />
+        <button id="addUrlBtn" class="btn btn-primary mt-2">Shorten</button>
+        <div id="errorMsg" class="text-danger mt-2"></div>
+    </div>
+}
+
+<div id="urlTableContainer">
+    @Html.Partial("_ShortUrlTable", Model)
+</div>
+
+@section Scripts {
+    <script>
+        let currentPage = @ViewBag.CurrentPage ?? 1;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const addButton = document.getElementById("addUrlBtn");
+
+            if (addButton) {
+                addButton.addEventListener("click", async () => {
+                    const url = document.getElementById("newUrl").value;
+                    const response = await fetch('/ShortUrls/AddUrl', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `originalUrl=${encodeURIComponent(url)}`
+                    });
+
+                    if (response.ok) {
+                        document.getElementById("newUrl").value = "";
+                        document.getElementById("errorMsg").innerText = "";
+                        await loadPage(1);
+                    } else {
+                        const error = await response.text();
+                        document.getElementById("errorMsg").innerText = error;
+                    }
+                });
+            }
+        });
+
+        async function loadPage(page) {
+            currentPage = page;
+            const response = await fetch(`/ShortUrls/Index?page=${page}&isPartial=true`);
+            const html = await response.text();
+            document.getElementById("urlTableContainer").innerHTML = html;
+        }
+
+        async function deleteUrl(id) {
+            const res = await fetch(`/ShortUrls/Delete/${id}`, { method: 'POST' });
+            if (res.ok) {
+                const tableBody = document.querySelector("#urlTableContainer tbody");
+                const rowCount = tableBody.rows.length;
+
+                if (rowCount > 1) {
+                    await loadPage(currentPage);
+                } else if (currentPage > 1) {
+                    await loadPage(currentPage - 1);
+                } else {
+                    await loadPage(1);
+                }
+            }
+        }
+
+        window.deleteUrl = deleteUrl;
+        window.loadPage = loadPage;
+    </script>
+}

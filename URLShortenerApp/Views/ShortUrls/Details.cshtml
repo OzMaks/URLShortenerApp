@@ -1,0 +1,8 @@
+﻿@model ShortUrl
+
+<h2>Short URL Details</h2>
+
+<p><strong>Original URL:</strong> @Model.OriginalUrl</p>
+<p><strong>Short Code:</strong> @Model.ShortCode</p>
+<p><strong>Created By:</strong> @Model.CreatedBy?.UserName</p>
+<p><strong>Created Date:</strong> @Model.CreatedDate.ToLocalTime()</p>

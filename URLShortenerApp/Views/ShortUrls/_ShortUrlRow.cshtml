@@ -1,0 +1,23 @@
+﻿@using System.Security.Claims
+@using URLShortenerApp.Settings
+
+@model URLShortenerApp.Models.ShortUrl
+
+
+<tr id="row-@Model.Id">
+    <td>@Model.OriginalUrl</td>
+    <td>
+        <a href="/r/@Model.ShortCode" target="_blank">@Model.ShortCode</a>
+    </td>
+    <td>
+        <a href="/ShortUrls/Details/@Model.Id" class="btn btn-info btn-sm">Info</a>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (User.IsInRole(Roles.Admin) || userId == Model.CreatedById)
+            {
+                <button onclick="deleteUrl(@Model.Id)" class="btn btn-danger btn-sm">Delete</button>
+            }
+        }
+    </td>
+</tr>

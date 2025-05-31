@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ShortUrl>
+@using URLShortenerApp.Settings
+@{
+    var currentPage = ViewBag.CurrentPage ?? 1;
+    var totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Original</th>
+            <th>Short</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var canDelete = User.Identity?.IsAuthenticated == true &&
+            (User.IsInRole(Roles.Admin) || User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?
+            .Value == item.CreatedById);
+
+            <tr>
+                <td>@item.OriginalUrl</td>
+                <td><a href="/r/@item.ShortCode" target="_blank">@item.ShortCode</a></td>
+                <td>
+                    <a href="/ShortUrls/Details/@item.Id" class="btn btn-info btn-sm">Info</a>
+                    @if (canDelete)
+                    {
+                        <button class="btn btn-danger btn-sm" onclick="deleteUrl(@item.Id)">Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == currentPage ? "active" : "")">
+                <a class="page-link" href="javascript:void(0);" onclick="loadPage(@i)">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

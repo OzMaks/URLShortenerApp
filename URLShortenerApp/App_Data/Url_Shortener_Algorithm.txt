@@ -1,0 +1,20 @@
+URL Shortening Algorithm Description
+
+Our URL shortener uses a simple yet effective algorithm based on GUIDs (Globally Unique Identifiers).
+
+How it works:
+
+1. We call Guid.NewGuid(), which generates a 128-bit unique identifier.
+   Example: 3f2504e0-4f89-11d3-9a0c-0305e82c3301
+
+2. We convert this GUID to a string without hyphens using the "N" format.
+   Result: 3f2504e04f8911d39a0c0305e82c3301 (32 hexadecimal characters)
+
+3. We then take the first 8 characters of this string using Substring(0, 8).
+   Final short code: 3f2504e0
+
+Why this works:
+
+- GUIDs are designed to be globally unique, which drastically reduces the chances of collision.
+- By taking only the first 8 characters, we get a compact code that is user-friendly.
+- Each character is a hexadecimal digit (0-9, a-f), meaning we get 16^8 (over 4 billion) possible combinations.

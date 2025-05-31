@@ -6,16 +6,19 @@ TECHNICAL STACK
 - EntityFramework CodeFirst approach - Any Framework for Unit tests ACTUAL
 
 TASK
+
 We need to build URL Shortener. The goals are to create an application that will shorten
 any URL and to have possibility to navigate by this short equivalent.
 There are such views: Login view, Short URLs Table view, Short URL Info view, About
 view. Adding some Unit tests will be a huge plus.
 
 LOGIN VIEW
+
 On the Login View you should be able to enter Login, Password and Authorize yourself.
 You need to have Admin and ordinary users.
 
 SHORT URLS TABLE VIEW
+
 This page has table with all URLs and their equivalent after shortening, deleting of the
 records is possible(only authorized users). You can view details about these URLs by
 navigating to Short URL Info view with correct Id.
@@ -35,11 +38,13 @@ Short URL Info (Anonymous can't access this page)
 This page contains info about URL (CreatedBy, CreatedDate, any other fields).
 
 About view
+
 This should contain a description of your Url Shortener algorithm. Visible for
 everyone(even not authorize) but can be edited only by admin users. Just an ordinary
 Razor page with submit action.
 
 Guidelines
+
 Only spend up to two days working on this task.
 If we have a technical interview, and I hope we do, we will focus on enhancing this application
 and discussing how you worked through some of these problems. It's important that we see your
